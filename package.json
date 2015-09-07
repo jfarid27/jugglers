@@ -1,0 +1,23 @@
+{
+  "name": "juggs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start"
+  },
+  "author": "J. Farid",
+  "license": "GPL3",
+  "dependencies": {
+    "amdefine": "^1.0.0",
+    "jasmine": "^2.3.2",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-mocha-reporter": "^1.1.1",
+    "karma-requirejs": "^0.2.2",
+    "lapack": "^0.1.0",
+    "requirejs": "^2.1.20"
+  }
+}
