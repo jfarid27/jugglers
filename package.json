@@ -18,6 +18,7 @@
     "karma-mocha-reporter": "^1.1.1",
     "karma-requirejs": "^0.2.2",
     "lapack": "^0.1.0",
-    "requirejs": "^2.1.20"
+    "requirejs": "^2.1.20",
+    "underscore": "^1.8.3"
   }
 }

@@ -14,7 +14,7 @@ require.config({
 
   // example of using a couple path translations (paths), to allow us to refer to different library dependencies, without using relative paths
   paths: {
-    'lapack': './node_modules/lapack/lib/node-lapack/index',
+    'underscore': './node_modules/underscore/underscore',
   },
 
   // example of using a shim, to load non AMD libraries (such as underscore)
