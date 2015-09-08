@@ -8,7 +8,7 @@ define(function (require, exports, module) {
             var bCircuits = _.times(info.circuits.length, function() {
                 return juggsPerCircuit
             })
-            var bJuggs = _.times(info.circuits.length, function() {
+            var bJuggs = _.times(info.jugglers.length, function() {
                 return 1
             })
             cb(bCircuits.concat(bJuggs))

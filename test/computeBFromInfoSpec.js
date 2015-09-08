@@ -4,20 +4,22 @@ if (typeof define !== 'function') {
 define(function (require, exports, module) {
     describe("computeBFromInfo", function() {
         var _ = require("underscore")
+
         var computeBFromInfo = require("src/computeBFromInfo")(_);
+
         describe("scenario when given problem info", function() {
-            
-            var info, juggs, cirs
+
+            var information, juggs, cirs
             beforeEach(function() {
-                juggs = [{}, {}, {}, {}]
-                cirs = [{}, {}]
-                info = {
+                juggs = _.times(4, function() { return {"code": "foo"} });
+                cirs = _.times(2, function() { return {"code": "bar"} });
+                information = {
                     jugglers: juggs,
                     circuits: cirs
-                }
+                };
                 expected = [2, 2, 1, 1, 1, 1]
             })
-            describe("it should return appropriate constraint vector in cb", function(done) {
+            it("should return appropriate B vector in cb", function(done) {
                 var cb = function(result) {
                     var matchesExpected = result.reduce(function(agg, next, index) {
                         if (next != expected[index]){
@@ -29,7 +31,7 @@ define(function (require, exports, module) {
                     expect(matchesExpected).toBeTruthy()
                     done()
                 }
-                computeBFromInfo(info, cb)
+                computeBFromInfo(information, cb)
             })
         })
     })
