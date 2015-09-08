@@ -14,7 +14,7 @@ define(function (require, exports, module) {
             var splits = line.split(" ")
             if (splits[0] == "C") {
                 info.circuits.push(parseFileLine.circuit(line))
-            } else {
+            } else if (splits[0] == "J") {
                 info.jugglers.push(parseFileLine.juggler(line))
             }
             return info
