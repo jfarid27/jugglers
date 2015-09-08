@@ -3,8 +3,15 @@ if (typeof define !== 'function') {
 }
 define(function (require, exports, module) {
     module.exports = function(computeCFromInfo, _) {
-        var convertOutput = function(info, cb) {
-            return
+        var convertOutput = function(problemInfo, lines) {
+
+            var circsHash = _.object(problemInfo.circuits.map(function(c) { return c.code }), problemInfo.circuits)
+            var juggHash = _.object(problemInfo.jugglers.map(function(c) { return c.code }), problemInfo.jugglers)
+
+            var lines = lines.map(function(line, lineIndex){
+                return convertOutput.lineConverter(lineIndex, problemInfo.jugglers.length, juggHash, circsHash, line)
+            })
+            return lines
         }
 
         convertOutput.lineConverter = function(circIndex, numJuggs, juggHash, circsHash, line) {
