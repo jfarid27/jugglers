@@ -3,20 +3,23 @@ if (typeof define !== 'function') {
 }
 define(function (require, exports, module) {
     module.exports = function(computeCFromInfo, _) {
-        var convertOutput = function(problemInfo, lines) {
+        var convertOutput = function(problemInfo, xSoln) {
+
+            var jugglersLength = problemInfo.jugglers.length
+            var codeLines = problemInfo.circuits.map(function(c, i){
+                return xSoln.slice((problemInfo.jugglers.length * i), ((problemInfo.jugglers.length * i) + problemInfo.jugglers.length) )
+            })
 
             var circsHash = _.object(problemInfo.circuits.map(function(c) { return c.code }), problemInfo.circuits)
             var juggHash = _.object(problemInfo.jugglers.map(function(c) { return c.code }), problemInfo.jugglers)
 
-            var lines = lines.map(function(line, lineIndex){
-                return convertOutput.lineConverter(lineIndex, problemInfo.jugglers.length, juggHash, circsHash, line)
+            var lines = codeLines.map(function(line, lineIndex){
+                return convertOutput.lineConverter(lineIndex, jugglersLength, juggHash, circsHash, line)
             })
             return lines
         }
 
-        convertOutput.lineConverter = function(circIndex, numJuggs, juggHash, circsHash, line) {
-            var lineRow = line.slice(numJuggs*circIndex, (numJuggs*circIndex) +numJuggs)
-
+        convertOutput.lineConverter = function(circIndex, numJuggs, juggHash, circsHash, lineRow) {
             var finishedData = lineRow.reduce(function(stringData, jugglerSelected, jugglerIndex) {
 
                 if (jugglerSelected) {

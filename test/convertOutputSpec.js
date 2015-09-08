@@ -66,7 +66,7 @@ define(function (require, exports, module) {
                     ]
                 }
 
-                lines = [[0, 1, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 1, 0]]
+                lines = [0, 1, 0, 1, 1, 0, 1, 0]
                 expected = ["C0 J1 C0:100, J3 C0:100", "C1 J0 C1:200 C0:100, J2 C0:100 C1:200"]
                 result = convertOutput(problemInfo, lines)
             })
@@ -127,7 +127,7 @@ define(function (require, exports, module) {
                         },
                     }
 
-                    line = [0, 0, 0, 0, 1, 0, 1, 0]
+                    line = [1, 0, 1, 0]
                     expected = "C1 J0 C1:200 C0:100, J2 C0:100 C1:200"
                     result = convertOutput.lineConverter(circIndex, numJuggs, juggHash, circsHash, line)
                 })
