@@ -10,6 +10,10 @@ define(function (require, exports, module) {
                 return xSoln.slice((problemInfo.jugglers.length * i), ((problemInfo.jugglers.length * i) + problemInfo.jugglers.length) )
             })
 
+            if (codeLines[1970] != undefined){
+                console.log(codeLines[1970].map(function(j, i){ return i }).reduce(function(a, n) { return a+n}, 0))
+            }
+
             var circsHash = _.object(problemInfo.circuits.map(function(c) { return c.code }), problemInfo.circuits)
             var juggHash = _.object(problemInfo.jugglers.map(function(c) { return c.code }), problemInfo.jugglers)
 
