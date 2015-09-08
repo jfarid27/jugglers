@@ -15,10 +15,10 @@ define(function (require, exports, module) {
                 }
             })
 
-            jugg[0].preferences = ["C0"]
-            jugg[1].preferences = ["C1", "C0"]
-            jugg[2].preferences = ["C1"]
-            jugg[3].preferences = ["C1"]
+            juggs[0].preferences = ["C0"]
+            juggs[1].preferences = ["C1", "C0"]
+            juggs[2].preferences = ["C1"]
+            juggs[3].preferences = ["C1"]
 
             cirs = [{
                 code: "C0"
@@ -50,7 +50,7 @@ define(function (require, exports, module) {
                     result = indexer(numJuggs, numCircs, jugg, circ)
                 })
                 it("should properly parse row and column number based on code", function() {
-                    expect(result.row).toBe(4)
+                    expect(result.row).toBe(3)
                     expect(result.column).toBe(75)
                 })
             })
