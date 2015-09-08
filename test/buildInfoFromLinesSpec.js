@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
 define(function (require, exports, module) {
     describe("buildInfoFromLines", function() {
 
-        var computeBFromInfo, _, mockParseFileLine
+        var _, buildInfoFromLines, parseFileLine
         beforeEach(function() {
             _ = {
                reduce: function(lines, reducer) {
@@ -14,19 +14,12 @@ define(function (require, exports, module) {
                }
             }
 
-            mockParseFileLine = {
-                circuit: function(){
-                    return "Circuit"
-                },
-                juggler: function(){
-                    return "Juggler"
-                }
-            }
+            parseFileLine = require("src/parseFileLine")()
 
-            computeBFromInfo = require("src/computeBFromInfo")(mockParseFileLine, _);
+            buildInfoFromLines = require("src/buildInfoFromLines")(parseFileLine, _);
         })
 
-        describe("when given info and lines", function() {
+        describe("when given lines", function() {
 
             var lines, listener
             beforeEach(function() {
@@ -36,7 +29,7 @@ define(function (require, exports, module) {
                 ]
                 listener = []
 
-                computeBFromInfo.reducer = function() {
+                buildInfoFromLines.reducer = function() {
                     return "Reducer"
                 }
             })
@@ -52,12 +45,15 @@ define(function (require, exports, module) {
                     done()
                 }
 
-                computeBFromInfo(lines)
+                buildInfoFromLines(lines, cb)
             })
         })
 
         describe("reducer", function() {
-            var reducer = computeBFromInfo.reducer
+            var reducer
+            beforeEach(function() {
+                reducer = buildInfoFromLines.reducer
+            })
             describe("when given info object and line", function() {
                 var info
                 beforeEach(function() {
@@ -69,12 +65,15 @@ define(function (require, exports, module) {
                 describe("if line is a circuit object", function() {
                     var line
                     beforeEach(function(){
-                        line = "C C0 H:7 E:7 P:10"
+                        line = "C C0 H:6 E:7 P:10"
                     })
                     it("should append to info object a circuit using given parseFileLine", function() {
                         var result = reducer(info, line);
-                        expect(result.jugglers[0]).toBe("mockCircuit")
-                        expect(result.jugglers[1]).toBe("Circuit")
+                        expect(result.circuits[0]).toBe("mockCircuit")
+                        expect(result.circuits[1].code).toBe("C0")
+                        expect(result.circuits[1].score.H).toBe(6)
+                        expect(result.circuits[1].score.E).toBe(7)
+                        expect(result.circuits[1].score.P).toBe(10)
                     })
                 })
                 describe("if line is a jugg object", function() {
@@ -85,7 +84,13 @@ define(function (require, exports, module) {
                     it("should append to info object a jugg using given parseFileLine", function() {
                         var result = reducer(info, line);
                         expect(result.jugglers[0]).toBe("mockJuggler")
-                        expect(result.jugglers[1]).toBe("Juggler")
+                        expect(result.jugglers[1].code).toBe("J1")
+                        expect(result.jugglers[1].score.H).toBe(4)
+                        expect(result.jugglers[1].score.E).toBe(3)
+                        expect(result.jugglers[1].score.P).toBe(7)
+                        expect(result.jugglers[1].preferences).toContain("C0")
+                        expect(result.jugglers[1].preferences).toContain("C1")
+                        expect(result.jugglers[1].preferences).toContain("C2")
                     })
                 })
             })
