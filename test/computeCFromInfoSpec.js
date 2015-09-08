@@ -7,7 +7,7 @@ define(function (require, exports, module) {
     describe("computeCFromInfo", function() {
         var computeCFromInfo
         beforeEach(function() {
-            computeCFromInfo = require("src/computeAFromInfo")(_)
+            computeCFromInfo = require("src/computeCFromInfo")(_)
         })
         describe("builtin indexer", function() {
             describe("when given jugg and circuit", function() {

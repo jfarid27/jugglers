@@ -3,8 +3,10 @@ if (typeof define !== 'function') {
 }
 define(function (require, exports, module) {
     describe("computeBFromInfo", function() {
-        var computeBFromInfo = require("src/computeBFromInfo")();
+        var _ = require("underscore")
+        var computeBFromInfo = require("src/computeBFromInfo")(_);
         describe("scenario when given problem info", function() {
+            
             var info, juggs, cirs
             beforeEach(function() {
                 juggs = [{}, {}, {}, {}]
