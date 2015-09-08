@@ -3,11 +3,11 @@ if (typeof define !== 'function') {
 }
 define(function (require, exports, module) {
     module.exports = function() {
-        var computeBFromInfo = function(line, cb) {
+        var computeCFromInfo = function(line, cb) {
             return {}
         }
 
-        return computeBFromInfo;
+        return computeCFromInfo;
 
     }
 })
