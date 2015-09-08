@@ -49,7 +49,7 @@ define(function (require, exports, module) {
                     result = computeCFromInfo.scorer(jugg, cur)
                 })
                 it("should properly compute correlation score", function() {
-                    expect(result).toBe(86)
+                    expect(result).toBe(-86)
                 })
             })
         })
@@ -110,9 +110,9 @@ define(function (require, exports, module) {
             })
             it("should compute proper objective coefficients in cb", function(done) {
                 var cb = function(result) {
-                    
+
                     var matches = _.reduce(result, function(prev, val, index){
-                        if (val != expected[index]) {
+                        if (val != -expected[index]) {
                             return false
                         }
                         return true && prev

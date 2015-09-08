@@ -29,7 +29,7 @@ define(function (require, exports, module) {
             return ["H", "E", "P"].map(function(index){
                 return jugg.score[index] * circ.score[index]
             }).reduce(function(agg, next) {
-                return agg + next
+                return agg - next
             }, 0)
         }
 
