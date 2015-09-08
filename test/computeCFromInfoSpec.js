@@ -106,10 +106,11 @@ define(function (require, exports, module) {
                     jugglers: juggs,
                     circuits: cirs
                 }
-                expected = [ 86, 92, 128, 137, 170, 182, 212, 227 ]
+                expected = [ 86, 212, 338, 464, 104, 257, 410, 563 ]
             })
-            it("should compute proper objective coefficients in cb", function() {
+            it("should compute proper objective coefficients in cb", function(done) {
                 var cb = function(result) {
+                    
                     var matches = _.reduce(result, function(prev, val, index){
                         if (val != expected[index]) {
                             return false
@@ -117,7 +118,7 @@ define(function (require, exports, module) {
                         return true && prev
                     }, true)
 
-                    expect(matches).toBeTruthy()
+                    expect(matches).toBe(true)
                     done()
                 }
                 computeCFromInfo(info, cb)
