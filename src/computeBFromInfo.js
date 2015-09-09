@@ -14,6 +14,11 @@ define(function (require, exports, module) {
             cb(bCircuits.concat(bJuggs))
         }
 
+        computeBFromInfo.sparse = function(info, cb){
+            var juggsPerCircuit = info.jugglers.length / info.circuits.length;
+            cb([info.circuits.length, info.jugglers.length / info.circuits.length, info.jugglers.length])
+        }
+
         return computeBFromInfo;
 
     }
