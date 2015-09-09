@@ -55,6 +55,40 @@ define(function (require, exports, module) {
                 })
             })
         })
+        describe("sparse matrix generation method", function() {
+            describe("when given info", function() {
+                var expected
+                beforeEach(function(){
+                    expected = [[0, 0, 1], [1, 5, 1],
+                    [0, 1, 1], [1, 6, 1], [1, 7, 1],
+                    [2, 0, 1], [2, 4, 1],
+                    [3, 1, 1], [3, 5, 1],
+                    [4, 2, 1], [4, 6, 1],
+                    [5, 3, 1], [5, 7, 1]]
+                })
+                it("should properly generate sparse A matrix", function(done) {
+                    var cb = function(result) {
+                        var matches = _.reduce(result, function(prevRow, row, indexRow){
+                            var rowsMatch = _.reduce(row, function(prevCols, col, indexCol) {
+                                if (col != expected[indexRow][indexCol]) {
+                                    return false
+                                }
+                                return true && prevCols
+                            }, true)
+
+                            if (!rowsMatch) {
+                                return false
+                            }
+                            return true && prevRow
+                        }, true)
+
+                        expect(matches).toBeTruthy()
+                        done()
+                    }
+                    computeAFromInfo.sparse(info, cb)
+                })
+            })
+        })
         describe("scenario when given info", function() {
             var expected
             beforeEach(function() {

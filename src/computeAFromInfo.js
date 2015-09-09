@@ -40,6 +40,32 @@ define(function (require, exports, module) {
             cb(A)
         }
 
+        computeAFromInfo.sparse = function(info, cb){
+            var numJuggs = info.jugglers.length
+            var numCircs = info.circuits.length
+
+            var circuitConstraints = _.reduce(info.jugglers, function(agg, jugg) {
+                jugg.preferences.map(function(circuitCode){
+                    var index = computeAFromInfo.indexer(numJuggs, numCircs, jugg, {
+                        code: circuitCode
+                    })
+                    agg.push([index.row, index.column, 1])
+                })
+                return agg
+            }, [])
+
+            var jugglerConstraints = _.reduce(info.jugglers, function(agg, juggler, juggIndex) {
+                info.circuits.map(function(circuit) {
+                    var index = computeAFromInfo.indexer(numJuggs, numCircs, juggler, circuit)
+                    agg.push([juggIndex + numCircs, index.column, 1])
+                })
+                return agg
+            }, [])
+
+            var A = circuitConstraints.concat(jugglerConstraints)
+            cb(A)
+        }
+
         computeAFromInfo.indexer = function(numJuggs, numCircs, jugg, circ) {
             var juggIndex = parseInt(jugg.code.split("J")[1])
             var circIndex = parseInt(circ.code.split("C")[1])
