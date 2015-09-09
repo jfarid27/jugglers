@@ -29,7 +29,7 @@ define(function (require, exports, module) {
             var circHash = _.object(info.circuits.map(function(c){ return c.code }), info.circuits)
             var numJuggs = info.jugglers.length
             var numCircs = info.circuits.length
-
+            
             var sparseData = _.reduce(info.jugglers, function(agg, juggler){
                 juggler.preferences.map(function(preference){
                     var circ = circHash[preference]
