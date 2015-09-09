@@ -29,14 +29,16 @@ define(function (require, exports, module) {
             var circHash = _.object(info.circuits.map(function(c){ return c.code }), info.circuits)
             var numJuggs = info.jugglers.length
             var numCircs = info.circuits.length
-            var sparseData = []
-            info.jugglers.map(function(juggler){
+
+            var sparseData = _.reduce(info.jugglers, function(agg, juggler){
                 juggler.preferences.map(function(preference){
                     var circ = circHash[preference]
                     var index = computeCFromInfo.indexer(numJuggs, numCircs, juggler, circ)
-                    sparseData.push([index, computeCFromInfo.scorer(juggler, circ)])
+                    agg.push([index, computeCFromInfo.scorer(juggler, circ)])
                 })
-            })
+                return agg
+            }, [])
+
             cb(sparseData)
         }
 
