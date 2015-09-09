@@ -53,6 +53,76 @@ define(function (require, exports, module) {
                 })
             })
         })
+        describe("sparse array method", function() {
+            var info, juggs, cirs, expected
+            beforeEach(function() {
+                juggs = _.times(4, function(index){
+                    return {
+                        code: "J" + index,
+                    }
+                })
+
+                juggs[0].preferences = ["C0"]
+                juggs[0].score = {
+                    "H": 1,
+                    "E": 2,
+                    "P": 3
+                }
+                juggs[1].preferences = ["C0"]
+                juggs[1].score = {
+                    "H": 4,
+                    "E": 5,
+                    "P": 6
+                }
+                juggs[2].preferences = ["C1", "C0"]
+                juggs[2].score = {
+                    "H": 7,
+                    "E": 8,
+                    "P": 9
+                }
+                juggs[3].preferences = ["C1"]
+                juggs[3].score = {
+                    "H": 10,
+                    "E": 11,
+                    "P": 12
+                }
+
+                cirs = [{
+                    code: "C0",
+                    score: {
+                        "H": 13,
+                        "E": 14,
+                        "P": 15
+                    }
+                }, {
+                    code: "C1",
+                    score: {
+                        "H": 16,
+                        "E": 17,
+                        "P": 18
+                    }
+                }]
+                info = {
+                    jugglers: juggs,
+                    circuits: cirs
+                }
+                expected = [ [0, 86], [1, 212], [6,410], [2, 338], [7,563] ]
+            })
+            it("should compute proper objective coefficients in cb", function(done) {
+                var cb = function(result) {
+                    var matches = _.reduce(result, function(prev, val, index){
+                        if ((val[0] != expected[index][0]) || (val[1] != -expected[index][1]) ) {
+                            return false
+                        }
+                        return true && prev
+                    }, true)
+
+                    expect(matches).toBe(true)
+                    done()
+                }
+                computeCFromInfo.sparse(info, cb)
+            })
+        })
         describe("when given info", function() {
             var info, juggs, cirs, expected
             beforeEach(function() {

@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require("amdefine")(module)
 }
 define(function (require, exports, module) {
-    module.exports = function() {
+    module.exports = function(_) {
         var computeCFromInfo = function(info, cb) {
 
             var numJuggs = info.jugglers.length
@@ -23,6 +23,21 @@ define(function (require, exports, module) {
                 })
             })
             cb(c)
+        }
+
+        computeCFromInfo.sparse = function(info, cb) {
+            var circHash = _.object(info.circuits.map(function(c){ return c.code }), info.circuits)
+            var numJuggs = info.jugglers.length
+            var numCircs = info.circuits.length
+            var sparseData = []
+            info.jugglers.map(function(juggler){
+                juggler.preferences.map(function(preference){
+                    var circ = circHash[preference]
+                    var index = computeCFromInfo.indexer(numJuggs, numCircs, juggler, circ)
+                    sparseData.push([index, computeCFromInfo.scorer(juggler, circ)])
+                })
+            })
+            cb(sparseData)
         }
 
         computeCFromInfo.scorer = function(jugg, circ) {
