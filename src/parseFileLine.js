@@ -17,7 +17,7 @@ define(function (require, exports, module) {
                 }
             }
             var splits = line.split(" ")
-            circuitObj.code = splits[1]
+            circuitObj.code = splits[1].split("\r").join("")
             circuitObj.score.H = parseInt(splits[2].split(":")[1])
             circuitObj.score.E = parseInt(splits[3].split(":")[1])
             circuitObj.score.P = parseInt(splits[4].split(":")[1])
@@ -35,12 +35,12 @@ define(function (require, exports, module) {
                 preferences: []
             }
             var splits = line.split(" ")
-            jugglerObj.code = splits[1]
+            jugglerObj.code = splits[1].split("\r").join("")
             jugglerObj.score.H = parseInt(splits[2].split(":")[1])
             jugglerObj.score.E = parseInt(splits[3].split(":")[1])
             jugglerObj.score.P = parseInt(splits[4].split(":")[1])
             splits[5].split(",").map(function(circuit) {
-                jugglerObj.preferences.push(circuit)
+                jugglerObj.preferences.push(circuit.split("\r").join(""))
             })
             return jugglerObj
         }
