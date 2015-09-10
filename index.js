@@ -79,7 +79,7 @@ var generateA = function(problemInfo) {
                     for (i in data){
                         var b
                         if (i == (data.length-1)) {
-                            b = JSON.stringify(data[i]) + "\n"
+                            b = JSON.stringify(data[i])
                         } else {
                             b = JSON.stringify(data[i]) + ",\n"
                         }
