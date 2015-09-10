@@ -64,12 +64,43 @@ fs.readFile(dataFileName, function(err, result) {
 var generateA = function(problemInfo) {
     return function(done) {
         computeAFromInfo.sparse(problemInfo, function(data){
-            fs.writeFile("./data/A.json", new Buffer(JSON.stringify(data)), function(err){
-                if (err) {
+
+            fs.open("./data/A.json", "w+", function(err, fd){
+                if (err){
                     done(err, null)
+                    return
                 }
-                console.log("Wrote A to json.\n")
-                done(null)
+                fs.write(fd, "[", function(err) {
+                    if (err) {
+                        done(err, null)
+                        return
+                    }
+
+                    for (i in data){
+                        var b
+                        if (i == (data.length-1)) {
+                            b = JSON.stringify(data[i]) + "\n"
+                        } else {
+                            b = JSON.stringify(data[i]) + ",\n"
+                        }
+
+                        fs.writeSync(fd, b, function(err){
+                            if (err){
+                                done(err, null)
+                                return
+                            }
+                        })
+                    }
+                    fs.write(fd, "]", function(err) {
+                        if (err){
+                            done(err, null)
+                            return
+                        }
+                        console.log("Wrote A to json.\n")
+                        done(null)
+                    })
+
+                })
             })
         })
     }
