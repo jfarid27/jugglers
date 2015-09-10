@@ -1,6 +1,6 @@
 import json
 from scipy import sparse
-from cvxpy import Minimize, variable, sum_entries, square, Problem
+from cvxpy import *
 
 if (__name__ == "__main__"):
     aFile = open("./data/A.json")
