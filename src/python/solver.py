@@ -45,14 +45,14 @@ if (__name__ == "__main__"):
     Cc.set_shape((1, nColsA))
 
     x = Variable(nColsA)
-    objective = Minimize(sum_entries(square(AC*x)))
+    objective = Minimize(sum_entries(square(Ac*x)))
     constraints = [0 <= x, x <= 1]
     prob = Problem(objective, constraints)
     print "Optimal value", prob.solve()
     valueFile = open('./data/value.json', 'w')
     json.dump(prob.solve(), valueFile)
     resultFile = open('./data/X.json', 'w')
-    json.dump(x.value(), resultFile)
+    json.dump(x.value.tolist(), resultFile)
     valueFile.close
     resultFile.close
     aFile.close
