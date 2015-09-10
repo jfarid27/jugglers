@@ -24,14 +24,15 @@ fs.readFile(dataFileName, function(err, result) {
     if (err) {
         console.log("Error on file read!\n")
     }
+    console.log("Read main text data\n")
     var lines = (result.toString()).split("\n")
     buildInfoFromLines(lines, function(problemInfo) {
 
         async
-            .parallel([
-                generateA(problemInfo),
+            .series([
                 generateB(problemInfo),
-                generateC(problemInfo)
+                generateC(problemInfo),
+                generateA(problemInfo)
             ], function(err, results) {
                 if (err) {
                     console.log("Failed on problem generation\n")
@@ -44,6 +45,7 @@ fs.readFile(dataFileName, function(err, result) {
                 }
 
                 pyShell.run("solver.py", options, function(err, result){
+                    console.log(result)
                     if (err) {
                         console.log("Received python err\n")
                         console.log(err)
@@ -61,7 +63,7 @@ fs.readFile(dataFileName, function(err, result) {
 //Generate A matrix and store it in data
 var generateA = function(problemInfo) {
     return function(done) {
-        computeAFromInfo(problemInfo, function(data){
+        computeAFromInfo.sparse(problemInfo, function(data){
             fs.writeFile("./data/A.json", new Buffer(JSON.stringify(data)), function(err){
                 if (err) {
                     done(err, null)
@@ -75,7 +77,7 @@ var generateA = function(problemInfo) {
 //Generate B vector and store it in data
 var generateB = function(problemInfo) {
     return function(done) {
-        computeBFromInfo(problemInfo, function(data){
+        computeBFromInfo.sparse(problemInfo, function(data){
             fs.writeFile("./data/B.json", new Buffer(JSON.stringify(data)), function(err){
                 if (err) {
                     done(err, null)
@@ -89,7 +91,7 @@ var generateB = function(problemInfo) {
 //Generate C vector and store it in data
 var generateC = function(problemInfo) {
     return function(done) {
-        computeCFromInfo(problemInfo, function(data){
+        computeCFromInfo.sparse(problemInfo, function(data){
             fs.writeFile("./data/C.json", new Buffer(JSON.stringify(data)), function(err){
                 if (err) {
                     done(err, null)
