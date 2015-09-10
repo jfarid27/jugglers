@@ -1,8 +1,6 @@
 import json
-from scipy.optimize import linprog
 from scipy import sparse
-import sys
-import numpy as np
+from cvxpy import Minimize, variable, sum_entries, square, Problem
 
 if (__name__ == "__main__"):
     aFile = open("./data/A.json")
@@ -22,7 +20,7 @@ if (__name__ == "__main__"):
     #Load up A
     for x in aMat:
         A[x[0], x[1]] = x[2]
-        
+
     #Load up B circuit constraints
     hold = 0
     while (hold < bMat[1]):
@@ -45,10 +43,17 @@ if (__name__ == "__main__"):
     Bc.set_shape((nRowsA, 1))
     Cc = C.tocsc()
     Cc.set_shape((1, nColsA))
-    res = linprog(Cc, A_eq=Ac, b_eq=Bc, bounds=(0,1), options={'maxiter':100})
 
+    x = Variable(n)
+    objective = Minimize(sum_entries(square(AC*x)))
+    constraints = [0 <= x, x <= 1]
+    prob = Problem(objective, constraints)
+    print "Optimal value", prob.solve()
+    valueFile = open('./data/value.json', 'w')
+    json.dump(prob.solve(), valueFile)
     resultFile = open('./data/X.json', 'w')
-    json.dump(res.x.tolist(), resultFile)
+    json.dump(x.value(), resultFile)
+    valueFile.close
     resultFile.close
     aFile.close
     bFile.close
