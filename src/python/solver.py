@@ -1,6 +1,6 @@
 import json
 from scipy import sparse
-from cvxpy import *
+import cvxpy as cvx
 
 if (__name__ == "__main__"):
     aFile = open("./data/A.json")
@@ -44,17 +44,21 @@ if (__name__ == "__main__"):
     Cc = C.tocsc()
     Cc.set_shape((1, nColsA))
 
-    x = Variable(nColsA)
-    objective = Minimize(sum_entries(Cc*x))
-    constraints = [0 <= x, x <= 1, (Ac*x) <= Bc, (Ac*x) >= Bc]
-    prob = Problem(objective, constraints)
+    x = cvx.Variable(nColsA)
+    objective = cvx.Minimize(cvx.sum_entries(Cc*x))
+    constraints = [0 <= x, x <= 1, (Ac*x) == Bc]
+    prob = cvx.Problem(objective, constraints)
     print "Optimal value", prob.solve()
-    valueFile = open('./data/value.json', 'w')
-    json.dump(prob.solve(), valueFile)
+
     resultFile = open('./data/X.json', 'w')
     json.dump(x.value.tolist(), resultFile)
-    valueFile.close
     resultFile.close
+
+    problemStatusFile = open("./data/status.json", "w")
+    status = {"status": prob.status, "value": prob.value}
+    json.dump(status, problemStatusFile)
+    problemStatusFile.close
+
     aFile.close
     bFile.close
     cFile.close
