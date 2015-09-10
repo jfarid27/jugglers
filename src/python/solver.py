@@ -23,8 +23,8 @@ if (__name__ == "__main__"):
 
     #Load up B circuit constraints
     hold = 0
-    while (hold < bMat[1]):
-        B[hold] = bMat[0] #Jugglers per circuits
+    while (hold < bMat[0]):
+        B[hold] = bMat[1] #Jugglers per circuits
         hold += 1
 
     #Load up B juggler constraints
