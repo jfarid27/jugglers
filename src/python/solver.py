@@ -44,7 +44,7 @@ if (__name__ == "__main__"):
     Cc = C.tocsc()
     Cc.set_shape((1, nColsA))
 
-    x = Variable(n)
+    x = Variable(nColsA)
     objective = Minimize(sum_entries(square(AC*x)))
     constraints = [0 <= x, x <= 1]
     prob = Problem(objective, constraints)
