@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./index.js -f data/initial.txt",
+    "start": "node -–max-old-space-size=244000000 ./index.js -f data/initial.txt",
     "test": "./node_modules/karma/bin/karma start"
   },
   "author": "J. Farid",
