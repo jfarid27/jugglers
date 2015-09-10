@@ -10,8 +10,8 @@ if (__name__ == "__main__"):
     cFile = open("./data/C.json")
     cMat = json.load(cFile)
 
-    nRowsA = bMat[2] + bMat[1]
-    nColsA = bMat[2] * bMat[1]
+    nRowsA = bMat[2] + bMat[0]
+    nColsA = bMat[2] * bMat[0]
 
     A = sparse.lil_matrix((nRowsA, nColsA))
     B = sparse.lil_matrix((nRowsA, 1))
