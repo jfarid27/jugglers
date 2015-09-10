@@ -45,8 +45,8 @@ if (__name__ == "__main__"):
     Cc.set_shape((1, nColsA))
 
     x = Variable(nColsA)
-    objective = Minimize(sum_entries(square(Ac*x)))
-    constraints = [0 <= x, x <= 1]
+    objective = Minimize(sum_entries(Cc*x))
+    constraints = [0 <= x, x <= 1, (Ac*x) <= Bc, (Ac*x) >= Bc]
     prob = Problem(objective, constraints)
     print "Optimal value", prob.solve()
     valueFile = open('./data/value.json', 'w')
