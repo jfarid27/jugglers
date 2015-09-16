@@ -55,16 +55,40 @@ define(function (require, exports, module) {
                 })
             })
         })
+        describe("preferencesParse method", function() {
+            describe("scenario when given a circuit preference string", function() {
+                var expected, result, preference
+                beforeEach(function() {
+                    preference = "C143"
+                    expected = 143
+                    result = computeAFromInfo.preferencesParse(preference)
+                })
+                it("should return proper numerical index of referenced circuit", function() {
+                    expect(result).toBe(expected)
+                })
+            })
+        })
         describe("sparse matrix generation method", function() {
             describe("when given info", function() {
                 var expected
                 beforeEach(function(){
-                    expected = [[0, 0, 1], [1, 5, 1],
-                    [0, 1, 1], [1, 6, 1], [1, 7, 1],
-                    [2, 0, 1], [2, 4, 1],
-                    [3, 1, 1], [3, 5, 1],
-                    [4, 2, 1], [4, 6, 1],
-                    [5, 3, 1], [5, 7, 1]]
+                    var circuit1Vals = _.times(4, function(index){
+                        return [0, index]
+                    })
+
+                    var circuit2Vals = _.times(4, function(index){
+                        return [1, index + 4]
+                    })
+
+                    var jugglerVals = _.times(4, function(index){
+                        return [[index + 2, index], [index + 2, index + 4]]
+                    }).reduce(function(agg, arr){
+                        return agg.concat(arr)
+                    }, [])
+
+                    var jugglerPrefs = [[6,0], [7,5], [7,1], [8,6], [9,7]]
+
+                    expected = circuit1Vals.concat(circuit2Vals).concat(jugglerVals).concat(jugglerPrefs)
                 })
                 it("should properly generate sparse A matrix", function(done) {
                     var cb = function(result) {

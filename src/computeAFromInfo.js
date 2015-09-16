@@ -44,12 +44,12 @@ define(function (require, exports, module) {
             var numJuggs = info.jugglers.length
             var numCircs = info.circuits.length
 
-            var circuitConstraints = _.reduce(info.jugglers, function(agg, jugg) {
-                jugg.preferences.map(function(circuitCode){
-                    var index = computeAFromInfo.indexer(numJuggs, numCircs, jugg, {
-                        code: circuitCode
+            var circuitConstraints = _.reduce(info.circuits, function(agg, circuit, circuitIndex) {
+                info.jugglers.map(function(juggler){
+                    var index = computeAFromInfo.indexer(numJuggs, numCircs, juggler, {
+                        code: circuit.code
                     })
-                    agg.push([index.row, index.column, 1])
+                    agg.push([index.row, index.column])
                 })
                 return agg
             }, [])
@@ -57,13 +57,28 @@ define(function (require, exports, module) {
             var jugglerConstraints = _.reduce(info.jugglers, function(agg, juggler, juggIndex) {
                 info.circuits.map(function(circuit) {
                     var index = computeAFromInfo.indexer(numJuggs, numCircs, juggler, circuit)
-                    agg.push([juggIndex + numCircs, index.column, 1])
+                    agg.push([juggIndex + numCircs, index.column])
                 })
                 return agg
             }, [])
 
-            var A = circuitConstraints.concat(jugglerConstraints)
+            var startRow = numCircs + numJuggs;
+
+            var preferencesConstraints = _.reduce(info.jugglers, function(agg, juggler, juggIndex){
+                var items = _.map(juggler.preferences, function(preference) {
+                    var j = [juggIndex + startRow, juggIndex + (computeAFromInfo.preferencesParse(preference) * numJuggs)]
+                    return j
+                })
+                return agg.concat(items)
+            }, [])
+
+            var A = circuitConstraints.concat(jugglerConstraints).concat(preferencesConstraints)
             cb(A)
+        }
+
+        computeAFromInfo.preferencesParse = function(preference) {
+            var circIndex = parseInt(preference.split("C")[1])
+            return circIndex
         }
 
         computeAFromInfo.indexer = function(numJuggs, numCircs, jugg, circ) {
