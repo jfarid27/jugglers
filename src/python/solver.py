@@ -1,5 +1,6 @@
 import json
 from scipy import sparse
+import numpy
 import cvxpy as cvx
 
 if (__name__ == "__main__"):
@@ -10,7 +11,7 @@ if (__name__ == "__main__"):
     cFile = open("./data/C.json")
     cMat = json.load(cFile)
 
-    nRowsA = bMat[2] + bMat[0]
+    nRowsA = 2 * bMat[2] + bMat[0]
     nColsA = bMat[2] * bMat[0]
 
     A = sparse.lil_matrix((nRowsA, nColsA))
@@ -19,7 +20,7 @@ if (__name__ == "__main__"):
 
     #Load up A
     for x in aMat:
-        A[x[0], x[1]] = x[2]
+        A[x[0], x[1]] = 1
 
     #Load up B circuit constraints
     hold = 0
@@ -27,7 +28,7 @@ if (__name__ == "__main__"):
         B[hold] = bMat[1] #Jugglers per circuits
         hold += 1
 
-    #Load up B juggler constraints
+    #Load up B juggler constraints and preference constraints
     hold = bMat[1]
     while (hold < nRowsA):
         B[hold, 0] = 1
