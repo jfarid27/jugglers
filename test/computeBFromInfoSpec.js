@@ -16,6 +16,7 @@ define(function (require, exports, module) {
                     jugglers: juggs,
                     circuits: cirs
                 };
+                // circuits, jugglers per circuit, jugglers
                 expected = [2, 2, 4]
             })
             it("should return appropriate B vector datain cb", function(done) {
