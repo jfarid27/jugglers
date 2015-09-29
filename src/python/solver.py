@@ -3,9 +3,22 @@ from scipy import sparse
 import numpy
 import cvxpy as cvx
 
+def vectorPotential(c):
+    g = lambda x: c * x
+    return g
+
+class SimulatedAnnealing():
+    def simulate(nsteps, T, V, changeStep, state, generateNewState, gamma):
+        for step in nsteps:
+            if (step == changeStep):
+                T = T - gamma
+            newState = generateNewState(state)
+            transitionOdds = math.exp( - ( V(newState) - V(state)  ) / T)
+            if random.uniform(0, 1) < transitionOdds:
+                state = newState
+        return state
+
 if (__name__ == "__main__"):
-    aFile = open("./data/A.json")
-    aMat = json.load(aFile)
     bFile = open("./data/B.json")
     bMat = json.load(bFile)
     cFile = open("./data/C.json")
@@ -14,52 +27,20 @@ if (__name__ == "__main__"):
     nRowsA = 2 * bMat[2] + bMat[0]
     nColsA = bMat[2] * bMat[0]
 
-    A = sparse.lil_matrix((nRowsA, nColsA))
-    B = sparse.lil_matrix((nRowsA, 1))
     C = sparse.lil_matrix((1, nColsA))
-
-    #Load up A
-    for x in aMat:
-        A[x[0], x[1]] = 1
-
-    #Load up B circuit constraints
-    hold = 0
-    while (hold < bMat[0]):
-        B[hold] = bMat[1] #Jugglers per circuits
-        hold += 1
-
-    #Load up B juggler constraints and preference constraints
-    hold = bMat[1]
-    while (hold < nRowsA):
-        B[hold, 0] = 1
-        hold += 1
 
     #Load up C
     for x in cMat:
         C[0, x[0]] = x[1]
 
-    Ac = A.tocsr()
-    Ac.set_shape((nRowsA, nColsA))
-    Bc = B.tocsc()
-    Bc.set_shape((nRowsA, 1))
-    Cc = C.tocsc()
-    Cc.set_shape((1, nColsA))
+    x = sparse.lil_matrix((1, nColsA))
 
-    x = cvx.Variable(nColsA)
-    objective = cvx.Minimize(cvx.sum_entries(Cc*x))
-    constraints = [0 <= x, x <= 1, (Ac*x) == Bc]
-    prob = cvx.Problem(objective, constraints)
-    print "Optimal value", prob.solve()
+    simulationInstance = SimulatedAnnealing()
+    minimized = simulationInstance.simulate(10^9, 10^8, vectorPotential, 1000, x, randomState, 100)
 
     resultFile = open('./data/X.json', 'w')
-    json.dump(x.value.tolist(), resultFile)
+    json.dump(minimized.tolist(), resultFile)
+    
     resultFile.close
-
-    problemStatusFile = open("./data/status.json", "w")
-    status = {"status": prob.status, "value": prob.value}
-    json.dump(status, problemStatusFile)
-    problemStatusFile.close
-
-    aFile.close
     bFile.close
     cFile.close

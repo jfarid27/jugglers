@@ -6,8 +6,6 @@ var argvs = require('minimist')(process.argv.slice(2)),
 //My code
 var parseFileLine = require("./src/parseFileLine")(),
     buildInfoFromLines = require("./src/buildInfoFromLines")(parseFileLine, _),
-    computeAFromInfo = require("./src/computeAFromInfo")(_),
-    computeBFromInfo = require("./src/computeBFromInfo")(_),
     computeCFromInfo = require("./src/computeCFromInfo")(_),
     convertOutput = require("./src/convertOutput")(computeCFromInfo, _),
     pyShell = require("python-shell");
@@ -32,7 +30,6 @@ fs.readFile(dataFileName, function(err, result) {
             .series([
                 generateB(problemInfo),
                 generateC(problemInfo),
-                generateA(problemInfo)
             ], function(err, results) {
                 if (err) {
                     console.log("Failed on problem generation\n")
@@ -60,51 +57,7 @@ fs.readFile(dataFileName, function(err, result) {
     })
 
 })
-//Generate A matrix and store it in data
-var generateA = function(problemInfo) {
-    return function(done) {
-        computeAFromInfo.sparse(problemInfo, function(data){
 
-            fs.open("./data/A.json", "w+", function(err, fd){
-                if (err){
-                    done(err, null)
-                    return
-                }
-                fs.write(fd, "[", function(err) {
-                    if (err) {
-                        done(err, null)
-                        return
-                    }
-
-                    for (i in data){
-                        var b
-                        if (i == (data.length-1)) {
-                            b = JSON.stringify(data[i])
-                        } else {
-                            b = JSON.stringify(data[i]) + ",\n"
-                        }
-
-                        fs.writeSync(fd, b, function(err){
-                            if (err){
-                                done(err, null)
-                                return
-                            }
-                        })
-                    }
-                    fs.write(fd, "]", function(err) {
-                        if (err){
-                            done(err, null)
-                            return
-                        }
-                        console.log("Wrote A to json.\n")
-                        done(null)
-                    })
-
-                })
-            })
-        })
-    }
-}
 //Generate B vector and store it in data
 var generateB = function(problemInfo) {
     return function(done) {
