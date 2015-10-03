@@ -76,7 +76,7 @@ var generateB = function(problemInfo) {
 //Generate C vector and store it in data
 var generateC = function(problemInfo) {
     return function(done) {
-        computeCFromInfo(problemInfo, function(data){
+        computeCFromInfo.sparse(problemInfo, function(data){
             fs.writeFile("./data/C.json", new Buffer(JSON.stringify(data)), function(err){
                 if (err) {
                     done(err, null)

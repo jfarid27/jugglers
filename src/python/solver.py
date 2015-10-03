@@ -61,11 +61,11 @@ if (__name__ == "__main__"):
     juggs = bMat[2]
     nColsA = juggs * circuits
 
-    C = np.zeros((1, nColsA))
+    C = np.full((1, nColsA), 100)
 
     #Load up C
-    for i, c in enumerate(cMat):
-        C[0, i] = c
+    for i in cMat:
+        C[0, i[0]] = i[1]
 
     x = np.zeros((1, nColsA))
 
