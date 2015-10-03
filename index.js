@@ -6,6 +6,7 @@ var argvs = require('minimist')(process.argv.slice(2)),
 //My code
 var parseFileLine = require("./src/parseFileLine")(),
     buildInfoFromLines = require("./src/buildInfoFromLines")(parseFileLine, _),
+    computeBFromInfo = require("./src/computeBFromInfo")(_),
     computeCFromInfo = require("./src/computeCFromInfo")(_),
     convertOutput = require("./src/convertOutput")(computeCFromInfo, _),
     pyShell = require("python-shell");
